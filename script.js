@@ -1,24 +1,62 @@
 var myArr = ["Audi", "BMW", "Ford", "Honda", "Jaguar", "Nissan"];
-
+var song = ["Audi"];
+var row = 1;
+var playCount = 0, pauseCount = 0, loopCount = 0;
 function showContent() {
-    var temp, item, a, i;
-    temp = document.getElementsByTagName("template")[0];
-    //get the div element from the template:
-    item = temp.content.querySelector("div");
-    //for each item in the array:
-    for (i = 0; i < myArr.length; i++) {
-        //Create a new node, based on the template:
-        a = document.importNode(item, true);
-        //Add data from the array:
-        a.textContent += myArr[i];
-        // adding background
-        var x = Math.floor(Math.random() * 256);
-        var y = Math.floor(Math.random() * 256);
-        var z = Math.floor(Math.random() * 256);
-        var bgColor = "rgb(" + x + "," + y + "," + z + ")";
 
-        a.style.background = bgColor;
-        //append the new node wherever you like:
-        document.getElementsByTagName("table").appendChild(a);
+    $('#template')
+        .clone()                               // CLONE THE TEMPLATE
+        .attr('id', 'row' + (row++))          // MAKE THE ID UNIQUE
+        .appendTo($('#myTable tbody'))       // APPEND TO THE TABLE
+        .css("background-color", "yellow")  //CHANGE BACKGTOUND COLOR
+        .show();                           // SHOW IT
+
+}
+
+function play() {
+    if (song.length == 0) {
+        alert("No Songs to play!")
     }
+    else {
+        if (playCount == 1) {
+            alert("already play...")
+        }
+        if (playCount == 0) {
+            $('#playSpan').text("on")
+            $('#pauseSpan').text("off")
+            playCount = 1;
+            pauseCount = 0;
+
+        }
+
+    }
+
+}
+
+function pause() {
+    if (playCount == 0) {
+        alert("You didnt play!")
+
+    } else if (playCount == 1 && pauseCount == 0) {
+        $('#playSpan').text("off")
+        $('#pauseSpan').text("on")
+        pauseCount = 1;
+        playCount = 0;
+    } else if (playCount == 0 && pauseCount == 1) {
+        alert("already pause...");
+    }
+
+
+}
+function loop() {
+    if (loopCount == 0) {
+        $('#loopSpan').text("on")
+        loopCount = 1;
+    }
+    else {
+        $('#loopSpan').text("off")
+        loopCount = 0;
+
+    }
+
 }

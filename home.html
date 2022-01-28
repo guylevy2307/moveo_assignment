@@ -13,30 +13,88 @@
         table,
         th,
         td {
-            border: 1px solid black;
+            border: 3px solid black;
+        }
+
+        /* Rounded sliders */
+        .slider.round {
+            border-radius: 34px;
+        }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+
+        .play {
+            background: url(./images/play.png) no-repeat;
+            width: 100px;
+            height: 100px;
+        }
+
+        .pause {
+            background: url(./images/pause.png) no-repeat;
+            width: 100px;
+            height: 100px;
+        }
+
+        .loop {
+            background: url(./images/loop.png) no-repeat;
+            width: 100px;
+            height: 100px;
         }
     </style>
-    <script src="script.js"> </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src=" script.js"> </script>
 </head>
 
 <body>
-    <template>
-        <div class="template">File name: </div>
-    </template>
 
 
     <h1>My Looper Website</h1>
     <button onclick="showContent()">Add file +</button>
 
-    <table>
-
+    <table id="myTable">
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Mute Button</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr id="template" style="display: none">
+                <td><span></span></td>
+                <td><input type="checkbox" placeholder="mute" /> <span class="slider round"></span></td>
+            </tr>
+        </tbody>
     </table>
     </br>
     </br>
     </br>
-    <script>
+    <table id="myTable2">
+        <thead>
+            <tr>
+                <th>Button</th>
+                <th>Is Active:</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td><input onclick="play()" type="button" id="play" /> </td>
+                <td><span id="playSpan"> off</span></td>
+            </tr>
+            <tr>
+                <td><input onclick="pause()" type="button" id="pause" /> </td>
+                <td><span id="pauseSpan"> off</span></td>
+            </tr>
+            <tr>
+            <tr>
+                <td><input onclick="loop()" type="button" id="loop" /> </td>
+                <td><span id="loopSpan"> off</span></td>
+            </tr>
+            </tr>
+        </tbody>
 
-    </script>
+    </table>
 </body>
 
 <footer>
