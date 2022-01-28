@@ -4,6 +4,7 @@ var row = 1;
 var playList = []
 var playCount = 0, stopCount = 0, loopCount = 0;
 var nowPlay = [];
+var flag = false;
 function showContent() {
 
     var i = 0;
@@ -36,7 +37,7 @@ function play() {
         if (playCount == 1) {
             alert("already play...")
         }
-        if (playCount == 0) {
+        else if (playCount == 0) {
             //play songs
             $('#playSpan').text("on")
             $('#pauseSpan').text("off")
@@ -44,7 +45,13 @@ function play() {
             stopCount = 0;
             scanList();
         }
+        else if (playCount == 1) {
+            //play songs
+            $('#playSpan').text("off")
+            playCount = 0;
+            stopCount = 1;
 
+        }
     }
 
 }
@@ -69,6 +76,7 @@ function loop() {
     if (loopCount == 0) {
         $('#loopSpan').text("on")
         loopCount = 1;
+        flag = true;
     }
     else {
         $('#loopSpan').text("off")
@@ -82,18 +90,33 @@ function loop() {
 function scanList() {
 
     var i = 0, j = 0;
+    nowPlay = [];
     for (; i < playList.length; i++) {
-        var row = "#row" + (i + 1) + "> #mute> #cd";
-        var cb = $(row).is(":checked")
-        if (!cb) {
+        var row = "#row" + (i + 1);
+        var isChecked = $('#myTable tbody tr:eq(' + (i + 1) + ') input:checkbox').is(':checked');
+        if (!isChecked) {
 
             var audio = new Audio("./sounds/" + playList[i]);
             nowPlay.push(audio);
-            nowPlay[j].play();
+            //nowPlay[j].play();
             j++;
 
         }
 
     }
+    playSong();
+}
+function playSong() {
+
+    if (flag) {
+        var i = 0;
+        for (; i < nowPlay.length; i++) {
+            nowPlay[i].play();
+        }
+        scanList();
+    }
+
+
+
 
 }

@@ -35,6 +35,11 @@
             width: 50px;
             height: 50px;
         }
+
+        .chk {
+            width: 25px;
+            height: 25px;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src=" script.js"> </script>
@@ -61,7 +66,7 @@
             <tbody>
                 <tr id="template" style="display: none">
                     <td id="fileName"> </td>
-                    <td id="mute"><input type="checkbox" id="cb" /> </td>
+                    <td><input type="checkbox" id="cb" class="chk" /> </td>
                 </tr>
             </tbody>
         </table>
@@ -81,7 +86,7 @@
                     <td><span id="playSpan"> off</span></td>
                 </tr>
                 <tr>
-                    <td><input onclick="stop()" type="image" src="./images/pause.jpg" id="stop" class="btn" /> </td>
+                    <td><input onclick="stop()" type="image" src="./images/stop.jpg" id="stop" class="btn" /> </td>
                     <td><span id="stopSpan"> off</span></td>
                 </tr>
                 <tr>
