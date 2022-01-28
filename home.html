@@ -6,6 +6,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
+        .content {
+            max-width: 500px;
+            margin: auto;
+        }
+
         body {
             font-family: Arial, Helvetica, sans-serif;
         }
@@ -25,22 +30,10 @@
             border-radius: 50%;
         }
 
-        .play {
-            background: url(./images/play.png) no-repeat;
-            width: 100px;
-            height: 100px;
-        }
+        .btn {
 
-        .pause {
-            background: url(./images/pause.png) no-repeat;
-            width: 100px;
-            height: 100px;
-        }
-
-        .loop {
-            background: url(./images/loop.png) no-repeat;
-            width: 100px;
-            height: 100px;
+            width: 50px;
+            height: 50px;
         }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -49,55 +42,60 @@
 
 <body>
 
+    <div class="content">
+        <h1>My Looper Website</h1>
+        </br>
+        </br>
+        <label for="myfile">Select the music:</label>
+        <input accept=".mp3" type="file" id="myfile" name="myfile" multiple>
+        <button onclick="showContent()">Add files To Looper</button>
 
-    <h1>My Looper Website</h1>
-    <button onclick="showContent()">Add file +</button>
+        <table id="myTable">
+            <thead>
+                <tr>
+                    <th>File Name</th>
+                    <th>Mute Button</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr id="template" style="display: none">
+                    <td id="fileName"> </td>
+                    <td id="mute" ><input type="checkbox" id="cb" /> </td>
+                </tr>
+            </tbody>
+        </table>
+        </br>
+        </br>
+        </br>
+        <table id="myTable2">
+            <thead>
+                <tr>
+                    <th>Button</th>
+                    <th>Is Active:</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input onclick="play()" type="image" src="./images/play.png" id="play" class="btn" /> </td>
+                    <td><span id="playSpan"> off</span></td>
+                </tr>
+                <tr>
+                    <td><input onclick="stop()" type="image" src="./images/pause.jpg" id="stop" class="btn" /> </td>
+                    <td><span id="stopSpan"> off</span></td>
+                </tr>
+                <tr>
+                <tr>
+                    <td><input onclick="loop()" type="image" src="./images/loop.png" id="loop" class="btn" /> </td>
+                    <td><span id="loopSpan"> off</span></td>
+                </tr>
+                </tr>
+            </tbody>
 
-    <table id="myTable">
-        <thead>
-            <tr>
-                <th>File Name</th>
-                <th>Mute Button</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr id="template" style="display: none">
-                <td><span></span></td>
-                <td><input type="checkbox" placeholder="mute" /> <span class="slider round"></span></td>
-            </tr>
-        </tbody>
-    </table>
-    </br>
-    </br>
-    </br>
-    <table id="myTable2">
-        <thead>
-            <tr>
-                <th>Button</th>
-                <th>Is Active:</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td><input onclick="play()" type="button" id="play" /> </td>
-                <td><span id="playSpan"> off</span></td>
-            </tr>
-            <tr>
-                <td><input onclick="pause()" type="button" id="pause" /> </td>
-                <td><span id="pauseSpan"> off</span></td>
-            </tr>
-            <tr>
-            <tr>
-                <td><input onclick="loop()" type="button" id="loop" /> </td>
-                <td><span id="loopSpan"> off</span></td>
-            </tr>
-            </tr>
-        </tbody>
-
-    </table>
+        </table>
+    </div>
 </body>
 
-<footer>
+<footer class="content">
     <p>Author: Guy Levy</p>
     <p><a href="mailto:guylevy2307@gmail.com">Email me</a></p>
 </footer>
