@@ -66,10 +66,11 @@
             <tbody>
                 <tr id="template" style="display: none">
                     <td id="fileName"> </td>
-                    <td><input type="checkbox" id="cb" class="chk" /> </td>
+                    <td><input type="checkbox" id="cb" class="chk" onclick="muteSong(this.id)" /> </td>
                 </tr>
             </tbody>
         </table>
+        <progress id="progress" value="0" style="display: none"></progress>
         </br>
         </br>
         </br>
@@ -86,7 +87,7 @@
                     <td><span id="playSpan"> off</span></td>
                 </tr>
                 <tr>
-                    <td><input onclick="stop()" type="image" src="./images/stop.jpg" id="stop" class="btn" /> </td>
+                    <td><input onclick="stop()" type="image" src="./images/stop.png" id="stop" class="btn" /> </td>
                     <td><span id="stopSpan"> off</span></td>
                 </tr>
                 <tr>

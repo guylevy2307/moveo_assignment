@@ -1,12 +1,13 @@
 var color = ["maroon", "purple", "yellow", "darkgreen", "aqua", "blueviolet", "chocolate", "crimson", "deeppink"];
 var colorIndex = 0;
 var row = 1;
-var playList = []
 var playCount = 0, stopCount = 0, loopCount = 0;
 var nowPlay = [];
 var flag = false;
+var rowCount = 1;
+var songMap = new Map();
 function showContent() {
-
+    nowPlay = []
     var i = 0;
     var curFiles = $('#myfile')[0].files;
     for (; i < curFiles.length; i++) {
@@ -19,18 +20,22 @@ function showContent() {
             .show();                                                   // SHOW IT
         var place = '#row' + (row - 1) + "> #fileName"
         $(place).text(file.name);
-        playList.push(file.name)
+        $(place).attr('id', 'fileName' + (row - 1));
+        $('#myTable tbody tr:eq(' + (row - 1) + ') input:checkbox').attr('id', 'chk' + (row - 1));
+        // playList.push(file.name);
         colorIndex++;
+        rowCount++;
     }
-
-
+    scanList();
+    $('#myfile')[0].files = null;
 
 
 
 }
 
 function play() {
-    if (playList.length == 0) {
+    scanList();
+    if (songMap.size == 0) {
         alert("No Songs to play!")
     }
     else {
@@ -40,20 +45,20 @@ function play() {
         else if (playCount == 0) {
             //play songs
             $('#playSpan').text("on")
-            $('#pauseSpan').text("off")
+            $('#stopSpan').text("off")
             playCount = 1;
             stopCount = 0;
-            scanList();
         }
         else if (playCount == 1) {
-            //play songs
+            //stop songs
+            stopSong();
             $('#playSpan').text("off")
             playCount = 0;
             stopCount = 1;
 
         }
     }
-
+    playSong()
 }
 
 function stop() {
@@ -62,6 +67,7 @@ function stop() {
 
     } else if (playCount == 1 && stopCount == 0) {
         //stop playing songs
+        stopSong();
         $('#playSpan').text("off")
         $('#stopSpan').text("on")
         stopCount = 1;
@@ -73,14 +79,16 @@ function stop() {
 
 }
 function loop() {
+
     if (loopCount == 0) {
         $('#loopSpan').text("on")
         loopCount = 1;
-        flag = true;
+        loopSong();
     }
     else {
         $('#loopSpan').text("off")
         loopCount = 0;
+        loopSongStop();
 
     }
 
@@ -89,34 +97,78 @@ function loop() {
 
 function scanList() {
 
-    var i = 0, j = 0;
-    nowPlay = [];
-    for (; i < playList.length; i++) {
+    var i = 0;
+
+    for (; i < rowCount - 1; i++) {
         var row = "#row" + (i + 1);
-        var isChecked = $('#myTable tbody tr:eq(' + (i + 1) + ') input:checkbox').is(':checked');
-        if (!isChecked) {
-
-            var audio = new Audio("./sounds/" + playList[i]);
-            nowPlay.push(audio);
-            //nowPlay[j].play();
-            j++;
-
-        }
-
+        fs = '#fileName' + (i + 1);
+        fsName = $(fs).html();
+        var audio = new Audio("./sounds/" + fsName);
+        songMap.set(fsName, audio);
+        nowPlay.push(audio);
     }
-    playSong();
+
 }
 function playSong() {
-
-    if (flag) {
-        var i = 0;
-        for (; i < nowPlay.length; i++) {
-            nowPlay[i].play();
+    if (songMap.size == 0) {
+        alert("There aren't any songs...")
+    }
+    else {
+        for (let [key, value] of songMap.entries()) {
+            value.play();
         }
-        scanList();
+    }
+}
+function stopSong() {
+    if (songMap.size == 0) {
+        alert("There aren't any songs...")
+    }
+    else {
+        for (let [key, value] of songMap.entries()) {
+            value.pause();
+            value.currentTime = 0;
+        }
+    }
+}
+function loopSong() {
+    if (songMap.size == 0) {
+        alert("There aren't any songs...")
+    }
+    else {
+
+        timeoutID = setTimeout(() => {
+            $('#playSpan').text("on")
+            playCount = 1;
+            playSong();
+            loopSong();
+        }, 10);
+    }
+}
+function loopSongStop() {
+    if (songMap.size == 0) {
+        alert("There aren't any songs...")
+    }
+    else {
+
+        clearTimeout(timeoutID);
+        stop();
     }
 
+}
 
+function muteSong(id) {
+    number = id.replace('chk', '');
+    fs = "#fileName" + number;
+    var name = $(fs).text();
+    var isChecked = $(id).is(':checked');
+    var audio = songMap.get(name);
+    if (!isChecked) {
+        audio.muted = true
 
+    }
+    else {
+        audio.muted = false
 
+    }
+    songMap.set(name, audio);
 }
