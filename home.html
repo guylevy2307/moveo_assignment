@@ -40,6 +40,51 @@
             width: 25px;
             height: 25px;
         }
+
+        #audio-player-container {
+            position: relative;
+            margin: 100px 5% auto 5%;
+            width: 90%;
+            max-width: 500px;
+            height: 80px;
+            background: rgba(255, 255, 255, 0);
+        }
+
+        #audio-player-container::before {
+            position: absolute;
+            content: '';
+            width: calc(100% + 4px);
+            height: calc(100% + 4px);
+            left: -2px;
+            top: -2px;
+            background: linear-gradient(to left, #007db5, #ff8a00);
+            z-index: -1;
+        }
+
+        p {
+            position: absolute;
+            top: -18px;
+            right: 5%;
+            padding: 0 5px;
+            margin: 0;
+            font-size: 28px;
+            background: linear-gradient(to left, #007db5, #ff8a00);
+
+        }
+
+        #play-icon {
+            margin: 10px 2.5% 10px 2.5%;
+        }
+
+        path {
+            stroke: #007db5;
+        }
+
+        input[type="range"] {
+            background: no-repeat center;
+            width: 70%;
+            height: 70%;
+        }
     </style>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src=" script.js"> </script>
@@ -55,7 +100,8 @@
         <input accept=".mp3" type="file" id="myfile" name="myfile" multiple>
         <button onclick="showContent()">Add files To Looper</button>
         </br>
-        </br>
+
+
         <table id="myTable">
             <thead>
                 <tr>
@@ -70,7 +116,13 @@
                 </tr>
             </tbody>
         </table>
-        <progress id="progress" value="0" style="display: none"></progress>
+        <div id="audio-player-container">
+            <p>Time Controler</p>
+            </br>
+            <span id="current-time" class="time">0:00</span>
+            <input type="range" id="seek-slider" max="17" value="0">
+            <span id="duration" class="time">0:00</span>
+        </div>
         </br>
         </br>
         </br>
@@ -103,8 +155,8 @@
 </body>
 
 <footer class="content">
-    <p>Author: Guy Levy</p>
-    <p><a href="mailto:guylevy2307@gmail.com">Email me</a></p>
+    <h3>Author: Guy Levy</h3>
+    <h3><a href="mailto:guylevy2307@gmail.com">Email me</a></h3>
 </footer>
 
 

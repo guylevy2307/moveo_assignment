@@ -2,12 +2,12 @@ var color = ["maroon", "purple", "yellow", "darkgreen", "aqua", "blueviolet", "c
 var colorIndex = 0;
 var row = 1;
 var playCount = 0, stopCount = 0, loopCount = 0;
-var nowPlay = [];
+
 var flag = false;
 var rowCount = 1;
 var songMap = new Map();
 function showContent() {
-    nowPlay = []
+
     var i = 0;
     var curFiles = $('#myfile')[0].files;
     for (; i < curFiles.length; i++) {
@@ -22,12 +22,14 @@ function showContent() {
         $(place).text(file.name);
         $(place).attr('id', 'fileName' + (row - 1));
         $('#myTable tbody tr:eq(' + (row - 1) + ') input:checkbox').attr('id', 'chk' + (row - 1));
-        // playList.push(file.name);
         colorIndex++;
         rowCount++;
+
     }
     scanList();
-    $('#myfile')[0].files = null;
+    timeCalc();
+    slider();
+    // $('#myfile')[0].files = null;
 
 
 
@@ -48,6 +50,7 @@ function play() {
             $('#stopSpan').text("off")
             playCount = 1;
             stopCount = 0;
+            playSong();
         }
         else if (playCount == 1) {
             //stop songs
@@ -58,14 +61,15 @@ function play() {
 
         }
     }
-    playSong()
+
 }
 
 function stop() {
     if (playCount == 0) {
         alert("You didnt play!")
 
-    } else if (playCount == 1 && stopCount == 0) {
+    }
+    else if (playCount == 1 && stopCount == 0) {
         //stop playing songs
         stopSong();
         $('#playSpan').text("off")
@@ -75,7 +79,7 @@ function stop() {
     } else if (playCount == 0 && stopCount == 1) {
         alert("already stopped.");
     }
-
+    if (loopCount == 1) { loop(); }
 
 }
 function loop() {
@@ -104,8 +108,19 @@ function scanList() {
         fs = '#fileName' + (i + 1);
         fsName = $(fs).html();
         var audio = new Audio("./sounds/" + fsName);
+        if (i == 0) {
+            seekSlider = document.getElementById('seek-slider');
+            audio.addEventListener('timeupdate', () => {
+                var time = (audio.currentTime);
+                seekSlider.value = time;
+                text = $("#current-time").text();
+                $("#current-time").text("0:" + Math.round(time));
+                console.log(time)
+
+            }, false);
+        }
         songMap.set(fsName, audio);
-        nowPlay.push(audio);
+
     }
 
 }
@@ -115,7 +130,9 @@ function playSong() {
     }
     else {
         for (let [key, value] of songMap.entries()) {
+
             value.play();
+
         }
     }
 }
@@ -128,6 +145,7 @@ function stopSong() {
             value.pause();
             value.currentTime = 0;
         }
+
     }
 }
 function loopSong() {
@@ -140,9 +158,12 @@ function loopSong() {
             $('#playSpan').text("on")
             playCount = 1;
             playSong();
+            if (loopCount == 1 && $("#seek-slider").value == "0:18") { resetSlider(); }
             loopSong();
-        }, 10);
+        }, 0);
+        loopCount = 1;
     }
+
 }
 function loopSongStop() {
     if (songMap.size == 0) {
@@ -151,7 +172,7 @@ function loopSongStop() {
     else {
 
         clearTimeout(timeoutID);
-        stop();
+
     }
 
 }
@@ -160,15 +181,45 @@ function muteSong(id) {
     number = id.replace('chk', '');
     fs = "#fileName" + number;
     var name = $(fs).text();
-    var isChecked = $(id).is(':checked');
+    var isChecked = document.getElementById(id).checked;
     var audio = songMap.get(name);
-    if (!isChecked) {
-        audio.muted = true
+    if (isChecked) {
+        audio.volume = 0;
 
     }
     else {
-        audio.muted = false
+        audio.volume = 1;
 
     }
     songMap.set(name, audio);
+}
+
+
+function timeCalc() {
+    durationContainer = document.getElementById('duration');
+    //set the time 
+    durationContainer.textContent = "0:17";
+}
+function slider() {
+    var name = $("#fileName1").text();
+    var audio = songMap.get(name);
+    //set the function to the slider
+    seekSlider = document.getElementById('seek-slider');
+    /*  audio.addEventListener('timeupdate', () => {
+          console.log("hi")
+          seekSlider.value = audio.currentTime;
+      }, false);*/
+    seekSlider.addEventListener('change', () => {
+        //change the song time
+        for (let [key, value] of songMap.entries()) {
+
+            value.currentTime = seekSlider.value;
+
+        }
+
+    });
+
+}
+function resetSlider() {
+    $("#seek-slider").val(0);
 }
