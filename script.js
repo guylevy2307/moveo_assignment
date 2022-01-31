@@ -2,9 +2,8 @@ var color = ["maroon", "purple", "yellow", "darkgreen", "aqua", "blueviolet", "c
 var colorIndex = 0;
 var row = 1;
 var playCount = 0, stopCount = 0, loopCount = 0;
-
-var flag = false;
 var rowCount = 1;
+//
 var songMap = new Map();
 function showContent() {
 
@@ -44,26 +43,15 @@ function play() {
         if (playCount == 1) {
             alert("already play...")
         }
-        else if (playCount == 0) {
+        else if (playCount == 0 || (playCount == 1 && stopCount == 0)) {
             //play songs
-            $('#playSpan').text("on")
-            $('#stopSpan').text("off")
-            playCount = 1;
-            stopCount = 0;
             playSong();
         }
-        else if (playCount == 1) {
-            //stop songs
-            stopSong();
-            $('#playSpan').text("off")
-            playCount = 0;
-            stopCount = 1;
 
-        }
+
+
     }
-
 }
-
 function stop() {
     if (playCount == 0) {
         alert("You didnt play!")
@@ -72,26 +60,21 @@ function stop() {
     else if (playCount == 1 && stopCount == 0) {
         //stop playing songs
         stopSong();
-        $('#playSpan').text("off")
-        $('#stopSpan').text("on")
-        stopCount = 1;
-        playCount = 0;
+
+
     } else if (playCount == 0 && stopCount == 1) {
         alert("already stopped.");
     }
-    if (loopCount == 1) { loop(); }
+    if (loopCount == 1) { loopSongStop() }
 
 }
 function loop() {
 
     if (loopCount == 0) {
-        $('#loopSpan').text("on")
-        loopCount = 1;
+
         loopSong();
     }
     else {
-        $('#loopSpan').text("off")
-        loopCount = 0;
         loopSongStop();
 
     }
@@ -108,6 +91,7 @@ function scanList() {
         fs = '#fileName' + (i + 1);
         fsName = $(fs).html();
         var audio = new Audio("./sounds/" + fsName);
+        //audio update the current time
         if (i == 0) {
             seekSlider = document.getElementById('seek-slider');
             audio.addEventListener('timeupdate', () => {
@@ -119,6 +103,17 @@ function scanList() {
 
             }, false);
         }
+        //if song mute turn volume down
+        id = "chk" + (i + 1);
+        var isChecked = document.getElementById(id).checked;
+        if (isChecked) {
+            audio.volume = 0;
+
+        }
+        else {
+            audio.volume = 1;
+
+        }
         songMap.set(fsName, audio);
 
     }
@@ -129,6 +124,10 @@ function playSong() {
         alert("There aren't any songs...")
     }
     else {
+        $('#playSpan').text("on")
+        $('#stopSpan').text("off")
+        playCount = 1;
+        stopCount = 0;
         for (let [key, value] of songMap.entries()) {
 
             value.play();
@@ -141,6 +140,10 @@ function stopSong() {
         alert("There aren't any songs...")
     }
     else {
+        $('#playSpan').text("off")
+        $('#stopSpan').text("on")
+        stopCount = 1;
+        playCount = 0;
         for (let [key, value] of songMap.entries()) {
             value.pause();
             value.currentTime = 0;
@@ -153,15 +156,13 @@ function loopSong() {
         alert("There aren't any songs...")
     }
     else {
-
+        $('#loopSpan').text("on")
+        loopCount = 1;
         timeoutID = setTimeout(() => {
-            $('#playSpan').text("on")
-            playCount = 1;
-            playSong();
+            if (palyCount == 1) { playSong(); }
             if (loopCount == 1 && $("#seek-slider").value == "0:18") { resetSlider(); }
             loopSong();
         }, 0);
-        loopCount = 1;
     }
 
 }
@@ -170,9 +171,9 @@ function loopSongStop() {
         alert("There aren't any songs...")
     }
     else {
-
+        loopCount = 0;
+        $('#loopSpan').text("off")
         clearTimeout(timeoutID);
-
     }
 
 }
@@ -198,9 +199,10 @@ function muteSong(id) {
 function timeCalc() {
     durationContainer = document.getElementById('duration');
     //set the time 
-    durationContainer.textContent = "0:17";
+    durationContainer.textContent = "0:18";
 }
 function slider() {
+    $("#audio-player-container").css("display", "block");
     var name = $("#fileName1").text();
     var audio = songMap.get(name);
     //set the function to the slider
@@ -223,3 +225,4 @@ function slider() {
 function resetSlider() {
     $("#seek-slider").val(0);
 }
+
