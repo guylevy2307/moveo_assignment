@@ -159,9 +159,9 @@ function loopSong() {
         $('#loopSpan').text("on")
         loopCount = 1;
         timeoutID = setTimeout(() => {
-            if (palyCount == 1) { playSong(); }
-            if (loopCount == 1 && $("#seek-slider").value == "0:18") { resetSlider(); }
-            loopSong();
+            if (playCount == 1) { playSong(); }
+            if ($("#seek-slider").value == "0:18") { resetSlider(); }
+            if (loopCount == 1) { loopSong(); }
         }, 0);
     }
 
