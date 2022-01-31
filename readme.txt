@@ -1,4 +1,5 @@
-hello users'welco,e to my app, how to use it?
+hello users welcome to my app, 
+how to use it?
 
 run RunThis.bat and then the app will open:
 
@@ -7,5 +8,6 @@ run RunThis.bat and then the app will open:
 3. you can choose if you want loop or not
 4. play some music
 5. stop the music
+6. ENJOY!
 
 Thank You!
